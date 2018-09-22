@@ -1,0 +1,19 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+etsy-py = "*"
+pyOpenSSL = "*"
+WooCommerce = "*"
+Flask = "*"
+Flask-Login = "*"
+Flask-SQLAlchemy = "*"
+Flask-Migrate = "*"
+Flask-WTF = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.6"

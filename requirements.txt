@@ -1,0 +1,8 @@
+pyopenssl
+woocommerce
+flask
+etsy_py
+flask-login
+flask-sqlalchemy
+flask-migrate
+flask-wtf
