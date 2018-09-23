@@ -5,6 +5,8 @@ name = "pypi"
 
 [packages]
 etsy-py = "*"
+"psycopg2" = "*"
+gunicorn = "*"
 pyOpenSSL = "*"
 WooCommerce = "*"
 Flask = "*"
