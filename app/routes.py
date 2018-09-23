@@ -56,6 +56,7 @@ def login():
 
 
 @app.route("/super_secret_register", methods=["GET", "POST"])
+@login_required  # TODO remove to allow user registration by anyone
 def register():
     if current_user.is_authenticated:
         return redirect(url_for("index"))
@@ -211,7 +212,7 @@ def index():
 
 
 @app.route("/etsy", methods=["GET", "POST"])
-# @login_required
+@login_required
 def etsy():
     form = ListingFromEtsyForm()
     if form.validate_on_submit():
