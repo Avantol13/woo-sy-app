@@ -38,6 +38,6 @@ def etsy_url_check(form, field):
         )
 
 
-class ListingFromEtsyForm(FlaskForm):
+class WoosyListingFromEtsyForm(FlaskForm):
     etsy_url = StringField("Etsy Item URL", validators=[URL(), etsy_url_check])
     submit = SubmitField("Sync")
