@@ -2,6 +2,11 @@ from enum import Enum
 import json
 
 
+class WoosyImage(str, object):
+    def __init__(self, url, *args, **kwargs):
+        self.url = url
+
+
 class WoosyListing(object):
     class Category(str, Enum):
         CLOTHING = "clothing"

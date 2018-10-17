@@ -47,19 +47,19 @@ class WooCommerceProduct(object):
         categories = get_woocommerce_categories_from_woosy_listing(woosy_listing)
 
         name = woosy_listing.title
-        type = "simple"
+        type_ = "simple"
         regular_price = woosy_listing.price
         status = status
         description = woosy_listing.description
         categories = list(categories)
 
-        # TODO
-        images = [
-            {
-                "src": "http://demo.woothemes.com/woocommerce/wp-content/uploads/sites/56/2013/06/T_2_front.jpg",
-                "position": 0,
-            }
-        ]
+        images = [{"src": woosy_listing.main_image, "position": 0}]
+        images.extend(
+            [
+                {"src": woosy_img.url, "position": count}
+                for count, woosy_img in enumerate(woosy_listing.other_images, 1)
+            ]
+        )
 
         return cls(
             name=name,
@@ -68,7 +68,7 @@ class WooCommerceProduct(object):
             description=description,
             categories=categories,
             images=images,
-            type=type,
+            type=type_,
         )
 
 

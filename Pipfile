@@ -16,6 +16,7 @@ Flask-Migrate = "*"
 Flask-WTF = "*"
 "flake8" = "*"
 flask-bootstrap = "*"
+python-wordpress-xmlrpc = "*"
 
 [dev-packages]
 

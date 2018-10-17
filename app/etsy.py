@@ -16,6 +16,19 @@ def get_etsy_listing(listing_id):
     return etsy_api.get(f"listings/{listing_id}")
 
 
+def get_etsy_listing_image_urls(listing_id):
+    images_response = etsy_api.get(f"listings/{listing_id}/images")
+
+    if images_response.status_code != 200:
+        raise Exception("could not retrieve images for listing: {listing_id}")
+
+    return [
+        image_resp["url_fullxfull"]
+        for image_resp in images_response.json().get("results")
+        if "url_fullxfull" in image_resp
+    ]
+
+
 def get_all_etsy_categories():
     return etsy_api.get("/taxonomy/categories")
 

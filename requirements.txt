@@ -9,3 +9,4 @@ flask-wtf
 flask-bootstrap
 psycopg2
 gunicorn
+python-wordpress-xmlrpc

@@ -2,8 +2,9 @@ from app import app, db
 from app.forms import RegistrationForm, WoosyListingFromEtsyForm
 import flask
 import json
+from app.wordpress import upload_image_from_url
+from copy import copy
 from flask import flash, redirect, render_template
-import pprint
 from urllib.parse import urlparse
 from urllib.parse import urljoin
 from flask import request, url_for
@@ -13,9 +14,13 @@ from app.models import User
 from app.forms import LoginForm
 from flask_login import login_required
 
-from app.etsy import get_etsy_listing_id_from_url, get_etsy_listing
+from app.etsy import (
+    get_etsy_listing_id_from_url,
+    get_etsy_listing,
+    get_etsy_listing_image_urls,
+)
 from app.woocommerce import WooCommerceProduct
-from app.listing import WoosyListing
+from app.listing import WoosyListing, WoosyImage
 
 
 def is_safe_url(target):
@@ -93,25 +98,40 @@ def etsy():
         etsy_url = form.etsy_url.data
 
         listing_id = get_etsy_listing_id_from_url(etsy_url)
-        pprint.pprint(listing_id)
-
-        # pprint.pprint(get_etsy_listings_for_shop(etsy_shop_id).json())
         etsy_listing_response = get_etsy_listing(listing_id)
         woosy_listing = WoosyListing.from_etsy_listing_response(etsy_listing_response)
 
-        print("Etsy......")
-        pprint.pprint(etsy_listing_response.json())
-        print("woosy_listing......")
-        pprint.pprint(json.loads(woosy_listing.to_json()))
+        # getting etsy images requires another API call
+        etsy_image_urls = get_etsy_listing_image_urls(listing_id)
+
+        # upload images to wordpress
+        wordpress_imgs = []
+        for img_url in etsy_image_urls:
+            response = upload_image_from_url(img_url)
+            wordpress_imgs.append(response)
+            app.logger.debug("Wordpress Image Upload: " + str(response))
+
+        # assume first pic returned is the main image
+        main_image = None
+        if wordpress_imgs:
+            main_image = WoosyImage(wordpress_imgs.pop(0).get("url"))
+
+        woosy_listing.main_image = main_image
+        woosy_listing.other_images = [
+            WoosyImage(img.get("url")) for img in wordpress_imgs
+        ]
+
+        app.logger.debug("Etsy resp: " + str(etsy_listing_response.json()))
+        app.logger.debug("woosy_listing: " + str(json.loads(woosy_listing.to_json())))
 
         woo_listing_data = WooCommerceProduct.from_woosy_listing(woosy_listing)
-        print("WooCommerceProduct......")
-        pprint.pprint(json.loads(woo_listing_data.to_json()))
+        app.logger.debug(
+            "WooCommerceProduct: " + str(json.loads(woo_listing_data.to_json()))
+        )
 
         response = woo_listing_data.post()
-        print("WooCommerce repsonse......")
-        pprint.pprint(response.text)
+        app.logger.debug("WooCommerce repsonse: " + str(response.text))
 
-        flash(f"Product created in WooCommerce from Etsy listing id {listing_id}!")
+        flash(f"Product created in WooCommerce from Etsy listing ID: {listing_id}!")
         return redirect(url_for("etsy"))
     return render_template("listing_from_etsy.html", title="Etsy Sync", form=form)
