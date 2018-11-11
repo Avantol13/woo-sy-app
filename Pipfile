@@ -4,19 +4,6 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-etsy-py = "*"
-"psycopg2" = "*"
-gunicorn = "*"
-pyOpenSSL = "*"
-WooCommerce = "*"
-Flask = "*"
-Flask-Login = "*"
-Flask-SQLAlchemy = "*"
-Flask-Migrate = "*"
-Flask-WTF = "*"
-"flake8" = "*"
-flask-bootstrap = "*"
-python-wordpress-xmlrpc = "*"
 
 [dev-packages]
 

@@ -2,7 +2,6 @@ from app import app, db
 from app.forms import RegistrationForm, WoosyListingFromEtsyForm
 import flask
 import json
-from app.wordpress import upload_image_from_url
 from copy import copy
 from flask import flash, redirect, render_template
 from urllib.parse import urlparse
@@ -14,13 +13,14 @@ from app.models import User
 from app.forms import LoginForm
 from flask_login import login_required
 
-from app.etsy import (
+from woo_sy.etsy import (
     get_etsy_listing_id_from_url,
     get_etsy_listing,
     get_etsy_listing_image_urls,
 )
-from app.woocommerce import WooCommerceProduct
-from app.listing import WoosyListing, WoosyImage
+from woo_sy.wordpress import upload_image_from_url
+from woo_sy.woo_commerce import WooCommerceProduct
+from woo_sy.listing import WoosyListing, WoosyImage
 
 
 def is_safe_url(target):
