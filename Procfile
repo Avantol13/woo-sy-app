@@ -1,1 +1,1 @@
-web: flask db upgrade; pip install poetry; poetry install; gunicorn woosy:app
+web: flask db upgrade; gunicorn woosy:app
