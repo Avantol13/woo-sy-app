@@ -1,2 +1,2 @@
-# woosy
-WooCommerce + Etsy = Woosy | A tool for syncing listings between the two
+# woo-sy-app
+WooCommerce + Etsy = woo-sy | woo-sy + Web App = woo-sy-app
