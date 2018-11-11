@@ -1,1 +1,1 @@
-web: flask db upgrade; gunicorn woo-sy-app:app
+web: flask db upgrade; gunicorn app:app
