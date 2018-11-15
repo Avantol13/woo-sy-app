@@ -3,7 +3,7 @@ from app.forms import RegistrationForm, WoosyListingFromEtsyForm
 import flask
 import json
 from copy import copy
-from flask import flash, redirect, render_template, jsonify
+from flask import flash, redirect, render_template, jsonify, Markup
 from urllib.parse import urlparse
 from urllib.parse import urljoin
 from flask import request, url_for
@@ -141,7 +141,14 @@ def etsy():
         job = q.enqueue_call(
             func=create_woosy_listing_from_etsy, args=(etsy_url,), timeout=5000
         )
-        flash(f"Background task started: {job.get_id()}!")
+        flash(
+            Markup(
+                f"Background task started: "
+                f'<a href="/etsy/results/{job.get_id()}" class="alert-link">'
+                f"{job.get_id()}"
+                f"</a>!"
+            )
+        )
         return redirect(url_for("etsy"))
     return render_template("listing_from_etsy.html", title="Etsy Sync", form=form)
 
@@ -150,6 +157,9 @@ def etsy():
 @app.route("/etsy/results/<job_key>", methods=["GET"])
 def get_results(job_key):
     job = Job.fetch(job_key, connection=conn)
+
+    if not job:
+        render_template("404.html"), 404
 
     response = ""
     if job.is_finished:
