@@ -18,6 +18,7 @@ flask-bootstrap = "*"
 python-wordpress-xmlrpc = "*"
 woo-sy = "*"
 flask = "~=1.0"
+rq = "*"
 
 [dev-packages]
 

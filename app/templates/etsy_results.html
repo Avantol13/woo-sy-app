@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+    {% if {{job_finished}} %}
+    <h1>Finished!</h1>
+    <h2>Results:</h2>
+    <p>{{ result }}</p>
+    {% else %}
+    <h1>Still syncing...</h1>
+    {% endif %}
+    <a href="."><button>REFRESH</button></a>
+{% endblock %}

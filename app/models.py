@@ -2,6 +2,7 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import db
 from app import login
+from sqlalchemy.dialects.postgresql import JSON
 
 
 @login.user_loader
@@ -32,3 +33,16 @@ class Listing(db.Model):
 
     def __repr__(self):
         return "<Listing {}>".format(self.body)
+
+
+class JobResult(db.Model):
+    __tablename__ = "job_results"
+
+    id = db.Column(db.Integer, primary_key=True)
+    response = db.Column(JSON)
+
+    def __init__(self, response):
+        self.response = response
+
+    def __repr__(self):
+        return "<id {}>".format(self.id)
